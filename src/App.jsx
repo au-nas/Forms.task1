@@ -5,8 +5,13 @@ export const RegisterForm = () => {
 	const [password, setPassword] = useState('');
 	const [repeatPassword, setRepeatPassword] = useState('');
 
+	const onSubmit = (event) => {
+		event.preventDefault();
+        console.log(email, password, repeatPassword)
+	};
+
 	return (
-		<form>
+		<form onSubmit={onSubmit}>
 			<input
 				name="email"
 				type="email"
