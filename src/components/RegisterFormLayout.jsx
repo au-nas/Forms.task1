@@ -1,42 +1,36 @@
-import styles from '../App.module.css';
+import { InputField } from './InputField';
 
-export const RegisterFormLayout = ({ formData, errors, onChange, onSubmit, ...props }) => {
+export const RegisterFormLayout = ({ formData, errors, onSubmit, onChange, isFormValid }) => {
     return (
-			<form onSubmit={onSubmit}>{errors && <div className={styles.errors}>{errors}</div>}
-				<input
+			<form onSubmit={onSubmit}>
+				<InputField
 					name="email"
 					type="email"
 					placeholder="Почта"
+					label="Почта"
 					value={formData.email}
-					onChange={({ target }) => setFormData({
-						...formData,
-						email: target.value,
-					})}
-					error={''}
-				></input>
-				<input
+					onChange={onChange}
+					error={errors.email}
+				></InputField>
+				<InputField
 					name="password"
 					type="password"
 					placeholder="Пароль"
+					label="Пароль"
 					value={formData.password}
-					onChange={({ target }) => setFormData({
-						...formData,
-						password: target.value,
-					})}
-					error={''}
-				></input>
-				<input
+					onChange={onChange}
+					error={errors.password}
+				></InputField>
+				<InputField
 					name="repeatPassword"
 					type="password"
 					placeholder="Повторите пароль"
+					label="Повторите пароль"
 					value={formData.repeatPassword}
-					onChange={({ target }) => setFormData({
-						...formData,
-						repeatPassword: target.value,
-					})}
-					error={''}
-				></input>
-				<button type="submit">Зарегистрироваться</button>
+					onChange={onChange}
+					error={errors.repeatPassword}
+				></InputField>
+				<button type="submit" disabled={!isFormValid}>Зарегистрироваться</button>
 			</form>
 		);
 	};

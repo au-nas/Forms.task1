@@ -44,7 +44,18 @@ export const RegisterForm = () => {
 
 	};
 
+	const handleChange = (event) => {
+		const { name, value } = event.target;
+
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			[name]: value,
+		}));
+	};
+
+	const isFormValid = Object.keys(errors).length === 0 && formData.email !== '' && formData.password !== '' && formData.repeatPassword !== '';
+
 	return (
-		<RegisterFormLayout formData={formData} errors={errors} onSubmit={onSubmit}/>
+		<RegisterFormLayout formData={formData} setFormData={setFormData} errors={errors} onSubmit={onSubmit} onChange={handleChange} isFormValid={isFormValid} />
 	);
 };
