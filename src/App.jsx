@@ -1,5 +1,10 @@
 import { useState } from 'react';
 
+
+const sendData = (formData) => {
+    console.log(formData);
+};
+
 export const RegisterForm = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -7,7 +12,7 @@ export const RegisterForm = () => {
 
 	const onSubmit = (event) => {
 		event.preventDefault();
-        console.log(email, password, repeatPassword)
+        sendData({ email, password, repeatPassword });
 	};
 
 	return (
