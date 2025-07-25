@@ -13,6 +13,8 @@ export const RegisterForm = () => {
 	});
 
 	const [errors, setErrors] = useState({});
+	const [wasSubmitted, setWasSubmitted] = useState(false);
+
 	const submitButtonRef = useRef(null);
 
 	const emailRegularEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,6 +40,7 @@ export const RegisterForm = () => {
 
 	const onSubmit = (event) => {
 		event.preventDefault();
+		setWasSubmitted(true);
 
 		const newErrors = validateForm(formData);
 
@@ -58,10 +61,17 @@ export const RegisterForm = () => {
 	const handleChange = (event) => {
 		const { name, value } = event.target;
 
-		setFormData((prevFormData) => ({
+		setFormData((prevFormData) => {
+			const updatedFormData = {
 				...prevFormData,
 				[name]: value,
-		}));
+			};
+
+			if (wasSubmitted) {
+				setErrors(validateForm(updatedFormData));
+			}
+			return updatedFormData;
+		});
 	};
 
 	const isValid = Object.keys(validateForm(formData)).length === 0;
