@@ -1,6 +1,6 @@
 import { InputField } from './InputField';
 
-export const RegisterFormLayout = ({ formData, errors, onSubmit, onChange, isFormValid }) => {
+export const RegisterFormLayout = ({ formData, errors, onSubmit, onChange, isFormValid, submitButtonRef }) => {
     return (
 			<form onSubmit={onSubmit}>
 				<InputField
@@ -30,7 +30,7 @@ export const RegisterFormLayout = ({ formData, errors, onSubmit, onChange, isFor
 					onChange={onChange}
 					error={errors.repeatPassword}
 				></InputField>
-				<button type="submit" disabled={!isFormValid}>Зарегистрироваться</button>
+				<button ref={submitButtonRef} type="submit" disabled={!isFormValid}>Зарегистрироваться</button>
 			</form>
 		);
 	};
