@@ -1,96 +1,47 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { RegisterFormLayout } from './RegisterFormLayout';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-const sendData = (formData) => {
-	console.log(formData);
-};
+const schema = yup.object().shape({
+	email: yup.string().email('Неверный формат почты'),
+	password: yup
+		.string()
+		.min(3, 'Слишком легкий пароль.Должно быть не меньше 3 символов'),
+	repeatPassword: yup.string().oneOf([yup.ref('password')], 'Пароли не совпадают'),
+});
 
 export const RegisterForm = () => {
-	const [formData, setFormData] = useState({
-		email: '',
-		password: '',
-		repeatPassword: '',
-	});
-
-	const [errors, setErrors] = useState({});
-	const [wasSubmitted, setWasSubmitted] = useState(false);
-
 	const submitButtonRef = useRef(null);
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isValid },
+	} = useForm({ mode: 'onChange', resolver: yupResolver(schema) });
 
-	const emailRegularEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-	const validateForm = (data) => {
-		const newErrors = {};
-
-		if (!emailRegularEx.test(data.email)) {
-			newErrors.email = 'Неверный формат почты';
-		}
-
-		if (data.password.length < 3) {
-			newErrors.password =
-				'Слишком легкий пароль. Должно быть не меньше 3 символов';
-		}
-
-		if (data.password !== data.repeatPassword) {
-			newErrors.repeatPassword = 'Пароли не совпадают';
-		}
-
-		return newErrors;
-	};
-
-	const onSubmit = (event) => {
-		event.preventDefault();
-		setWasSubmitted(true);
-
-		const newErrors = validateForm(formData);
-
-		if (Object.keys(newErrors).length > 0) {
-			setErrors(newErrors);
-			return;
-		}
-
-		setErrors({});
+	const onSubmit = (data) => {
+		console.log(data);
 
 		if (submitButtonRef.current) {
 			submitButtonRef.current.focus();
 		}
-
-		sendData(formData);
 	};
 
-	const handleChange = (event) => {
-		const { name, value } = event.target;
+	const emailError = errors.email?.message;
+const passwordError = errors.password?.message;
+const repeatPasswordError = errors.repeatPassword?.message;
 
-		setFormData((prevFormData) => {
-			const updatedFormData = {
-				...prevFormData,
-				[name]: value,
-			};
-
-			if (wasSubmitted) {
-				setErrors(validateForm(updatedFormData));
-			}
-			return updatedFormData;
-		});
-	};
-
-	const isValid = Object.keys(validateForm(formData)).length === 0;
-
-	const isFormValid =
-		isValid &&
-		formData.email !== '' &&
-		formData.password !== '' &&
-		formData.repeatPassword !== '';
 
 	return (
 		<RegisterFormLayout
-			formData={formData}
-			setFormData={setFormData}
-			errors={errors}
-			onSubmit={onSubmit}
-			onChange={handleChange}
-			isFormValid={isFormValid}
+			register={register}
+			onSubmit={handleSubmit(onSubmit)}
+			isFormValid={isValid}
 			submitButtonRef={submitButtonRef}
+			emailError={emailError}
+			passwordError={passwordError}
+            repeatPasswordError={repeatPasswordError}
 		/>
 	);
 };
