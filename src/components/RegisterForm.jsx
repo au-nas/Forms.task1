@@ -58,21 +58,16 @@ export const RegisterForm = () => {
 	const handleChange = (event) => {
 		const { name, value } = event.target;
 
-		setFormData((prevFormData) => {
-			const updatedFormData = {
+		setFormData((prevFormData) => ({
 				...prevFormData,
 				[name]: value,
-			};
-
-			const newErrors = validateForm(updatedFormData);
-			setErrors(newErrors);
-
-			return updatedFormData;
-		});
+		}));
 	};
 
+	const isValid = Object.keys(validateForm(formData)).length === 0;
+
 	const isFormValid =
-		Object.keys(errors).length === 0 &&
+		isValid &&
 		formData.email !== '' &&
 		formData.password !== '' &&
 		formData.repeatPassword !== '';
